@@ -131,4 +131,108 @@ Send a JSON object with the following structure:
 
 ---
 
+## `/api/v1/users/me` Get Current User Endpoint
+
+### HTTP Method
+
+`GET`
+
+### Description
+
+Retrieves the currently authenticated user's information. Requires a valid JWT token in the `Authorization` header or as a cookie.
+
+### Headers
+
+- `Authorization: Bearer <jwt_token>` (or send token as a cookie named `token`)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "User retrieved successfully",
+    "user": {
+      "id": "<user_id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+#### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
+
+## `/api/v1/users/logout` User Logout Endpoint
+
+### HTTP Method
+
+`GET`
+
+### Description
+
+Logs out the currently authenticated user by blacklisting their JWT token and clearing the authentication cookie.
+
+### Headers
+
+- `Authorization: Bearer <jwt_token>` (or send token as a cookie named `token`)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "User logged out successfully"
+  }
+  ```
+
+#### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
+
 For more endpoints and details, see the source code.
