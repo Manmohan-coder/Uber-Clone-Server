@@ -63,4 +63,72 @@ Send a JSON object with the following structure:
 
 ---
 
+## `/api/v1/users/login` User Login Endpoint
+
+### HTTP Method
+
+`POST`
+
+### Description
+
+Authenticates a user with email and password. Returns a JWT token and user details upon successful login.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "yourpassword"
+}
+```
+
+- `email` (string, required, valid email format)
+- `password` (string, required, min 6 chars)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "User logged in successfully",
+    "token": "<jwt_token>",
+    "user": {
+      "id": "<user_id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+#### Invalid Credentials
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
+
 For more endpoints and details, see the source code.
