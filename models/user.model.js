@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";  
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
         },
         lastname: {
             type: String,
-            required: true,
             minlength: [3, 'Last name must be at least 3 characters long'],
         }
     },
@@ -47,4 +46,5 @@ userSchema.statics.hashPassword = async function (password) {
 }
 
 const userModel = mongoose.model('user', userSchema);
+
 export default userModel;
