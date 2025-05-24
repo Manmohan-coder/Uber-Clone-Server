@@ -322,5 +322,197 @@ Send a JSON object with the following structure:
   ```
 
 ---
+## `/api/v1/captains/login` Captain Login Endpoint
+
+### HTTP Method
+
+`POST`
+
+### Description
+
+Authenticates a captain (driver) with email and password. Returns a JWT token and captain details upon successful login.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "jane.smith@example.com",
+  "password": "yourpassword"
+}
+```
+
+- `email` (string, required, valid email format)
+- `password` (string, required, min 6 chars)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "Captain logged in successfully",
+    "token": "<jwt_token>",
+    "captain": {
+      "id": "<captain_id>",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Smith"
+      },
+      "email": "jane.smith@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+  }
+  ```
+
+#### Invalid Credentials
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
+
+## `/api/v1/captains/me` Get Captain Profile Endpoint
+
+### HTTP Method
+
+`GET`
+
+### Description
+
+Retrieves the currently authenticated captain's profile information. Requires a valid JWT token in the `Authorization` header or as a cookie.
+
+### Headers
+
+- `Authorization: Bearer <jwt_token>` (or send token as a cookie named `token`)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "Captain profile retrieved successfully",
+    "captain": {
+      "id": "<captain_id>",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Smith"
+      },
+      "email": "jane.smith@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+  }
+  ```
+
+#### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Not Found
+
+- **Status Code:** `404 Not Found`
+- **Body:**
+  ```json
+  {
+    "message": "Captain not found"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
+
+## `/api/v1/captains/logout` Captain Logout Endpoint
+
+### HTTP Method
+
+`GET`
+
+### Description
+
+Logs out the currently authenticated captain by blacklisting their JWT token and clearing the authentication cookie.
+
+### Headers
+
+- `Authorization: Bearer <jwt_token>` (or send token as a cookie named `token`)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+#### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
 
 For more endpoints and details, see the source code.
