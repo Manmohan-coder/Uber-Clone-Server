@@ -45,15 +45,16 @@ export const loginUser = async (req, res, next) => {
         const { email, password } = req.body;
 
         // Check if the email already exists
-        const existingUser = await userModel.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: "Email already exist" });
-        }
+        // const existingUser = await userModel.findOne({ email });
+        // if (existingUser) {
+        //     return res.status(400).json({ message: "Email already exist" });
+        // }
         const user = await userModel.findOne({ email }).select('+password');
         if (!user) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
         const isMatch = await user.comparePassword(password);
+        
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
@@ -96,6 +97,9 @@ export const getUser = async (req, res, next) => {
 export const logoutUser = async (req, res, next) => {
     try {
         const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
         await blacklistTokenModel.create({ token });
         res.clearCookie("token");
         return res.status(200).json({
