@@ -234,5 +234,93 @@ Logs out the currently authenticated user by blacklisting their JWT token and cl
   ```
 
 ---
+## `/api/v1/captains/register` Captain Registration Endpoint
+
+### HTTP Method
+
+`POST`
+
+### Description
+
+Registers a new captain (driver) in the system. Requires valid personal and vehicle information. Returns a JWT token and captain details upon successful registration.
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Smith"
+  },
+  "email": "jane.smith@example.com",
+  "password": "yourpassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+- `fullname.firstname` (string, required, min 3 chars)
+- `fullname.lastname` (string, required, min 3 chars)
+- `email` (string, required, valid email format)
+- `password` (string, required, min 6 chars)
+- `vehicle.color` (string, required, min 3 chars)
+- `vehicle.plate` (string, required, min 5 chars, unique)
+- `vehicle.capacity` (number, required, min 1)
+- `vehicle.vehicleType` (string, required, one of: `car`, `bike`, `auto`)
+
+### Responses
+
+#### Success
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "message": "Captain registered successfully",
+    "token": "<jwt_token>",
+    "captain": {
+      "id": "<captain_id>",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Smith"
+      },
+      "email": "jane.smith@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC1234",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+    }
+  }
+  ```
+
+#### Duplicate Email
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+  ```json
+  {
+    "message": "Email already exists"
+  }
+  ```
+
+#### Server Error
+
+- **Status Code:** `500 Internal Server Error`
+- **Body:**
+  ```json
+  {
+    "error": "Error message"
+  }
+  ```
+
+---
 
 For more endpoints and details, see the source code.
